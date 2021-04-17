@@ -5,10 +5,18 @@
 /log/
 /dist/
 output-data/
+output/
 /bin/
-datasets/
 
 /.idea
 /out
 /.DS_store
 /yrw-epos.iml
+/target
+/dependency-reduced-pom.xml
+
+/result_processing/node_modules
+/result_processing/package-lock.json
+/result_processing/logs/*
+
+tutorial.iml
