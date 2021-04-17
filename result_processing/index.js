@@ -35,6 +35,28 @@ function create_logger(filename) {
 }
 
 async function main() {
+    Date.prototype.format = function (fmt) {
+        let o = {
+            "M+": this.getMonth() + 1,                 //月份
+            "d+": this.getDate(),                    //日
+            "h+": this.getHours(),                   //小时
+            "m+": this.getMinutes(),                 //分
+            "s+": this.getSeconds(),                 //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds()             //毫秒
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (let k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
+
     /**
      * 配置参数
      */
@@ -48,7 +70,6 @@ async function main() {
 
     //初始化Logger
     let l = create_logger('result_processing');
-    let startTime = new Date().getTime();
     l.info('开始处理...');
 
     // 读取文件夹
@@ -95,9 +116,7 @@ async function main() {
         })
 
         l.info('导出excel...');
-        let date = new Date();
-        let date_str = date.toISOString()
-            .split('T')[0];
+        let date_str = new Date().format("yyyy-MM-dd-hh-mm-ss");
         console.log(date_str);
         let header = Object.getOwnPropertyNames(result[0]);
         let data = [header];
