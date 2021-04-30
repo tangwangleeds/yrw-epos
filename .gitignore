@@ -18,5 +18,6 @@ output/
 /result_processing/node_modules
 /result_processing/package-lock.json
 /result_processing/logs/*
+/result_processing/result/*
 
 tutorial.iml
