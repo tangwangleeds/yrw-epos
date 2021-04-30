@@ -17,11 +17,11 @@ function create_logger(filename) {
                 type: 'file',
                 filename: './logs' + log_path,
                 encoding: 'utf8',
-                layout: {type: 'basic'},
+                layout: { type: 'basic' },
             },
             console: {
                 type: 'stdout',
-                layout: {type: 'basic'},
+                layout: { type: 'basic' },
             },
         },
         categories: {
@@ -60,13 +60,14 @@ async function main() {
     /**
      * 配置参数
      */
-        //输出文件夹path，结尾不需要加'/'
+    //输出文件夹path，结尾不需要加'/'
     const output_path = "/Users/wurining/Documents/吴日宁/1-Leeds/学习资料/1-5111 Bigdata System/Assessment/CW/yrw-epos/output";
     //统计结果输出位置
     const result_path = "./result";
     //全局cost函数文件名
     const global_cost_filename = "global-cost.csv";
-
+    //全局a,b函数文件名
+    const alpha_bate_filename = "weights-alpha-beta.csv";
 
     //初始化Logger
     let l = create_logger('result_processing');
@@ -97,7 +98,9 @@ async function main() {
         let result = [];
         for (const folder of folders) {
             let json = await csv().fromFile(`${output_path}/${folder}/${global_cost_filename}`);
+            let json2 = await csv().fromFile(`${output_path}/${folder}/${alpha_bate_filename}`);
             json = json.pop();
+            json2 = json2.pop();
             json.folder = folder;
             let run_key = [];
             Object.getOwnPropertyNames(json).filter((val) => {
@@ -106,6 +109,12 @@ async function main() {
                 run_key.push(json[val])
             })
             json.min = Math.min(...run_key)
+            for (key of Object.getOwnPropertyNames(json)) {
+                if (key.match("Run-"))
+                    delete json[key]
+            }
+            json.alpha = json2["Unfairness weight"]
+            json.beta = json2["Local cost weight"]
             result.push(json)
             // l.info(json);
         }

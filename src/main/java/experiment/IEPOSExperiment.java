@@ -30,6 +30,7 @@ import protopeer.SimulatedExperiment;
 import protopeer.util.quantities.Time;
 import treestructure.ModifiableTreeArchitecture;
 
+
 /**
  * @author Jovan N., Thomas Asikis
  */
@@ -157,8 +158,11 @@ public class IEPOSExperiment {
             IEPOSExperiment.runOneSimulation(config, createAgent);
         }
 
+        long timeBefore = System.currentTimeMillis();
         loggingProvider.print();
-
+        long timeAfter = System.currentTimeMillis();
+        System.out.println("loggingProvider Print Finished! It took: " + ((timeAfter - timeBefore) / 1000) + " seconds.");
+        System.exit(0);
     }
 
 }
